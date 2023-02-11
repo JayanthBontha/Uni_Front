@@ -1,13 +1,103 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: "PT Sans Narrow";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+  width: 100%;
+}
+
+.custom-bg{
+
+  background-image:linear-gradient(to bottom right,rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url(main.png);
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+.whi{
+  color: white;
+}
+
+.bigg{
+  font-size: xx-large;
+}
+
+.nlp{
+  padding-left: 0;
+}
+
+.wcontrol{
+  max-width: 400px;
+}
+
+.wcontrol2{
+  max-width: 350px;
+}
+
+.wcontrol3{
+  max-width: 200px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.dist{
+  margin-top: 2%;
+}
+
+.more-dist{
+  padding-top: 5%;
+  background-color: #fff;
+  background-clip: content-box;
+}
+
+.dist-bot{
+  margin-bottom: 1%;
+}
+
+.hide{
+  visibility: hidden;
+}
+
+.im{
+  width: 17px;
+  height: 17px;
+}
+
+.back-white{
+  background-color: white;
+}
+
+.fitmax{
+  width: 100%;
+  height: 100vh !important;
+  overflow: visible;
+}
+
+.eee{
+  background-color: #eee;
+}
+
+.eroor{
+  color: red;
+}
+
+.marleft{
+  margin-left: 1%;
+}
+
+.transparent-backdrop {
+  background-color: transparent;
+}
+
+.tab-wid{
+  width: 15%;
+}
+
+.tab-wid-m{
+  width:25%
 }

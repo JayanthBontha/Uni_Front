@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Reset from "./components/Reset"
+import Login from "./components/Log"
+import Home from "./components/Home"
+import Sign from "./components/SignUp"
+import Search from './components/Search';
+import Prof2 from './components/Prof2';
+import Mix from './components/Mix_Nav';
+import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { useState, useEffect } from 'react';
+import Terminator from './components/terminage';
+import Change from './components/Change';
+import M from './components/mod';
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
+  if (sessionStorage.getItem("NavbarVar") == null) {
+    sessionStorage.setItem('NavbarVar', 'NonUser');
+  }
+  const [NavbarVar, SetNavbarVar] = useState(sessionStorage.getItem('NavbarVar'));
+  const [Nm,SetNm] = useState('loading')
+
+  useEffect(() => {
+    window.addEventListener('change-nav', (e) => {
+      SetNavbarVar(e.detail.type);
+      sessionStorage.setItem('NavbarVar', e.detail.type);
+      SetNm(e.detail.nme);
+    });
+  });
+
+
+  return (<>
+    <BrowserRouter>
+      <Mix Var={NavbarVar} UsrNam={Nm} />
+      <Routes>
+        <Route exact path='/' element={<Home/>}/>
+        <Route path="/view-data" element={<div className='back-white fitmax'><Search/></div>}/>
+        <Route exact path='/login' element={<Login />}/>
+        <Route exact path='/resetPassword' element={<Reset />}/>
+        <Route exact path='/signUp' element={<Sign />}/>
+        <Route exact path='/profile' element={<Prof2/>}/>
+        <Route exact path='/terminate' element = {<Terminator/>}/>
+        <Route exact path='/changePass' element = {<Change/>}/>
+        <Route exact path='/modify' element={<M/>}/>
+        {/* <Route exact path="/as" element={<As/>}/> */}
+      </Routes>
+    </BrowserRouter>
+  </>
+  );
+
+};
 export default App;
