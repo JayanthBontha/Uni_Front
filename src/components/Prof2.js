@@ -19,8 +19,8 @@ function Prof2() {
         }).then(response => response.json())
           .then(json => {
             if (json._id == null) {
-              const eve = new CustomEvent('terminate');
-              window.dispatchEvent(eve);
+              // const eve = new CustomEvent('terminate');
+              // window.dispatchEvent(eve);
               sessionStorage.removeItem('mfa');
               const eve2 = new CustomEvent('change-nav', {
                 detail: {
@@ -31,7 +31,6 @@ function Prof2() {
               navigate('/terminate');
             }
             else {
-              console.log(json);
               setProfdata({
                 name: json.name,
                 email: json.email,

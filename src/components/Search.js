@@ -194,12 +194,13 @@ function Search() {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            {
+                            { (sessionStorage.getItem('mfa'))?
                                 (StarArr.includes(props.unique)) ?
                                     <button type='button' className='btn btn-danger' data-bs-dismiss="modal" onClick={() => { star_handler2(false, props.unique) }}>UnStar</button>
                                     : <button type='button' className='btn btn-warning' data-bs-dismiss="modal" onClick={() => { star_handler2(true, props.unique) }}>Star</button>
-
+                                : <div></div>
                             }
+                            
                             <Link a="research_paper.pdf" className="btn btn-primary" download>Download</Link>
                         </div>
                     </div>
