@@ -18,6 +18,7 @@ function logout() {
         })
     })
     sessionStorage.removeItem('mfa');
+    sessionStorage.setItem('dis','loading')
 
 }
 function Navbar_user(props) {
@@ -44,7 +45,7 @@ function Navbar_user(props) {
                         <li><Link className="dropdown-item" type="button" to={"/profile"}>View Profile</Link></li>
                         <li><Link className="dropdown-item" type="button" to={"/changePass"}>Change Password</Link></li>
                         {props.bool ?
-                            <li><Link className="dropdown-item" type="button" to={"/modifydata"}>Modify Data</Link></li> : <div></div>}
+                            <li><Link className="dropdown-item" type="button" to={"/modify"}>Modify Data</Link></li> : <div></div>}
                         <li><Link className="dropdown-item" type="button" onClick={logout} to={"/"}>Logout</Link></li>
                     </ul>
                 </div>

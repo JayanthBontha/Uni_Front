@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Sign() {
-  // const navigate = useNavigate();
-  // useEffect(()=>{
-  //   if(sessionStorage.getItem('mfa')!=null){
-  //     navigate('/profile');
-  //   }
-  // },[])
+  const navigate = useNavigate();
   const [emailError, setEmailError] = useState('none');
   function send(e) {
     e.preventDefault();
@@ -16,30 +11,35 @@ function Sign() {
     if (var_pass != var_repass) {
       setEmailError('same_nahi');
     }
-    fetch(process.env.REACT_APP_HOST+"/signUp", {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        insti: document.getElementById('insti').value,
-        role: document.getElementById('role').value,
-        pass: var_pass
-      })
-    }).then(res => res.json())
-      .then(data => {
-        if (data.code == 'successful') {
-          const eve = new CustomEvent('change-nav', {
-            detail: {
-              type: 'user'
-            }
-          });
-          window.dispatchEvent(eve);
-        }
-        else if (data.code == 'exists') {
-          setEmailError('wrong_hai');
-        }
-      });
+    else {
+      fetch(process.env.REACT_APP_HOST + "/signUp", {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('name').value,
+          email: document.getElementById('email').value,
+          insti: document.getElementById('insti').value,
+          role: document.getElementById('role').value,
+          pass: var_pass
+        })
+      }).then(res => res.json())
+        .then(data => {
+          if (data.code == 'successful') {
+            const eve = new CustomEvent('change-nav', {
+              detail: {
+                type: data.kind,
+                nme: document.getElementById('name').value
+              }
+            });
+            window.dispatchEvent(eve);
+            sessionStorage.setItem('mfa', data.mfa)
+            navigate('/profile')
+          }
+          else if (data.code == 'exists') {
+            setEmailError('wrong_hai');
+          }
+        });
+    }
   }
 
 

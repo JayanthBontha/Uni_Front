@@ -10,22 +10,25 @@ import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { useState, useEffect } from 'react';
 import Terminator from './components/terminage';
 import Change from './components/Change';
-import M from './components/mod';
+import M from './components/modify';
+
 
 
 function App() {
 
   if (sessionStorage.getItem("NavbarVar") == null) {
     sessionStorage.setItem('NavbarVar', 'NonUser');
+    sessionStorage.setItem('dis','loading')
   }
   const [NavbarVar, SetNavbarVar] = useState(sessionStorage.getItem('NavbarVar'));
-  const [Nm,SetNm] = useState('loading')
+  const [Nm,SetNm] = useState(sessionStorage.getItem('dis'))
 
   useEffect(() => {
     window.addEventListener('change-nav', (e) => {
       SetNavbarVar(e.detail.type);
       sessionStorage.setItem('NavbarVar', e.detail.type);
       SetNm(e.detail.nme);
+      sessionStorage.setItem('dis',e.detail.nme)
     });
   });
 

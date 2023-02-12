@@ -1,16 +1,16 @@
 import { Link} from "react-router-dom";
 import { useState,useEffect} from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function Login() {
   const [raiseError, setRaiseError] = useState('none');
-  // const navigate = useNavigate();
-  // useEffect(()=>{
-  //   if(sessionStorage.getItem('mfa')!=null){
-  //     navigate('/profile');
-  //   }
-  // },[])
+  const navigate = useNavigate();
+  useEffect(()=>{
+    if(sessionStorage.getItem('mfa')!=null){
+      navigate('/profile');
+    }
+  },[])
   function send(e) {
 
     e.preventDefault();

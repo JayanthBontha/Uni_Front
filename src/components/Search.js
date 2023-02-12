@@ -35,6 +35,7 @@ function Search() {
         })
         sessionStorage.removeItem('mfa');
         setMulti('none');
+        sessionStorage.setItem('dis','loading')
         alert("Your session has been terminated. Re-Login to continue")
     }
 
@@ -50,7 +51,7 @@ function Search() {
             let col=id.slice(-1);
             let tags = ['title', 'field', 'author', 'institute', 'date', 'status']
             let whatever;
-            if (direc == "down") {
+            if (direc === "down") {
                 whatever = [...TableData].sort(function (a, b) { return a[tags[col-1]].localeCompare(b[tags[col-1]]); }).reverse();
             }
             else {
@@ -64,19 +65,19 @@ function Search() {
         let changee = document.getElementById(id_ele);
         let comp = changee.src;
 
-        if (comp == dis) {
+        if (comp === dis) {
             reset();
             changee.src = down;
             sort(id_ele, "down");
         }
 
-        if (comp == down) {
+        if (comp === down) {
             reset();
             changee.src = up;
             sort(id_ele, "up");
         }
 
-        if (comp == up) {
+        if (comp === up) {
             reset();
             changee.src = down;
             sort(id_ele, "down");
@@ -84,15 +85,10 @@ function Search() {
 
     }
 
-    function stat_val(event) {
-        s = event.target.value;
-    }
-
-
     function dat_val(event) {
         let d1 = document.getElementById('date1');
         let d2 = document.getElementById('date2');
-        if (event.target.value == 3) {
+        if (event.target.value === 3) {
             setTwoDate('');
             d1.setAttribute("required", "");
             d2.setAttribute("required", "");
@@ -106,7 +102,7 @@ function Search() {
 
     function open() {
         if (sessionStorage.getItem('mfa')) {
-            if (Multi == 'none') setMulti('');
+            if (Multi === 'none') setMulti('');
             else setMulti('none');
         }
         else
@@ -124,7 +120,7 @@ function Search() {
             SetStarArr(dfdfh);
         }
         else {
-            SetStarArr(StarArr.filter(item => item != data));
+            SetStarArr(StarArr.filter(item => item !== data));
         }
     }
 
@@ -134,13 +130,13 @@ function Search() {
             dummy = [...StarArr, data];
         }
         else {
-            dummy = StarArr.filter(item => item != data);
+            dummy = StarArr.filter(item => item !== data);
         }
         SetStarArr(dummy);
     }
 
     function star_uploader() {
-        if (sessionStorage.getItem('flag') == 1) {
+        if (sessionStorage.getItem('flag') === 1) {
             fetch(process.env.REACT_APP_HOST+'/view-data/change-star', {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
@@ -161,7 +157,7 @@ function Search() {
             body: JSON.stringify({
                 title: document.getElementById('title').value,
                 field: document.getElementById('field').value,
-                status: s,
+                status: document.getElementById('status_getter').value,
                 institute: document.getElementById('insti').value,
                 author: document.getElementById('author').value,
                 pub: document.getElementById('date-select').value,
@@ -180,7 +176,7 @@ function Search() {
     function Mod(props) {
         return (<div>
             <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target={'#buffer' + props.unique} style={{ 'color': 'black', 'textAlign': 'left' }}>{props.title}</button>
-            <div className="modal fade" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true">
+            <div className="modal" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true" style={{'position':'fixed'}}>
                 <div className="modal-dialog" style={{'marginTop':'10%'}} role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -233,7 +229,7 @@ function Search() {
 
                     <div className="col-auto">
                         <label>Status</label>
-                        <select className="form-select" onChange={stat_val}>
+                        <select className="form-select" id='status_getter'>
                             <option default value="Completed">Completed</option>
                             <option value="Ongoing">Ongoing</option>
                             <option value="Cancelled">Cancelled</option>
@@ -301,7 +297,7 @@ function Search() {
                             <th className='tab-wid'>Date <img src={dis} className="im" id="im5" onClick={()=>{change_img("im5")}}></img></th>
                             <th className='tab-wid'>Status <img src={dis} className="im" id="im6" onClick={()=>{change_img("im6")}}></img></th>
 
-                            <th>{(Multi == "none") ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                            <th>{(Multi === "none") ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />
                                 <path fillRule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z" />
                             </svg>) : (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check2-square" viewBox="0 0 16 16">
@@ -326,7 +322,7 @@ function Search() {
                                             <td>{ele.date}</td>
                                             <td>{ele.status}</td>
                                             <td>
-                                                {(Multi == "none") ? (
+                                                {(Multi === "none") ? (
                                                     <Link to={'/download.pdf'}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="grey" className="bi bi-file-earmark-arrow-down-fill" viewBox="0 0 16 16">
                                                         <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zm-1 4v3.793l1.146-1.147a.5.5 0 0 1 .708.708l-2 2a.5.5 0 0 1-.708 0l-2-2a.5.5 0 0 1 .708-.708L7.5 11.293V7.5a.5.5 0 0 1 1 0z" />
                                                     </svg></Link>)

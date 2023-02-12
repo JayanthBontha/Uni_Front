@@ -37,7 +37,7 @@ function Mod(props) {
   return (<div>
     <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target={'#buffer' + props.idee} style={{ 'color': 'black', 'textAlign': 'left' }}>{props.title}</button>
 
-    <div className="modal" id={'buffer' + props.idee} tabIndex="-1" role="dialog" aria-labelledby="researchModalLabel" aria-hidden="true">
+    <div className="modal" id={'buffer' + props.idee} tabIndex="-1" role="dialog" aria-labelledby="researchModalLabel" aria-hidden="true" style={{'position':'fixed !important'}}>
       <div className="modal-dialog" style={{'marginTop':'10%'}} role="document">
         <div className="modal-content">
           <div className="modal-header">
