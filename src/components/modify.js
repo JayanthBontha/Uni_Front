@@ -22,7 +22,28 @@ function M() {
     }).then(res => res.json()).then(ans => {
       if (ans.code === 0) {
         alert("Data has been uploaded");
-        SetEror(0)
+        SetEror(0);
+        document.querySelector("form").reset();
+      }
+      else if (ans.code === 3) {
+        const eve = new CustomEvent('change-nav', {
+          detail: {
+            type: "NonUser",
+            nme: 'loading'
+          }
+        });
+        window.dispatchEvent(eve);
+        sessionStorage.setItem('NavbarVar', 'NonUser');
+        fetch(process.env.REACT_APP_HOST + '/logout', {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify({
+            mfa: sessionStorage.getItem('mfa')
+          })
+        })
+        sessionStorage.removeItem('mfa');
+        alert("Your session has been terminated. Re-Login to continue");
+        navigate('/terminate')
       }
       else SetEror(ans.code);
     })
@@ -32,8 +53,8 @@ function M() {
     <div className="col-auto">
       <label for="file">Upload an Excel file :</label>
       <input className="form-control" type="file" id="formFile" accept=".xls, .xlsx" style={{ 'maxWidth': '200px' }} required />
-      {Eror === 1 ? <p className="eroor">Recheck Headers</p> : <div />}
-      {Eror === 2 ? <p className="eroor">Make sure data is valid</p> : <div />}
+      {Eror === 1 ? <p className="eroor">Recheck Headers</p> : null}
+      {Eror === 2 ? <p className="eroor">Make sure data is valid</p> : null}
     </div>
     <div>
       <br></br>
