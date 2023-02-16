@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import dis from "./images/disabled.png"
-import down from "./images/down.png"
-import up from "./images/up.png"
+const dis = "https://i.imgur.com/3zl65RB.png";
+const down ="https://i.imgur.com/MTY7AJj.png"
+const up ="https://i.imgur.com/efLrj1U.png"
 
 function Search() {
     if (!sessionStorage.getItem('flag')) {
@@ -176,7 +176,7 @@ function Search() {
     function Mod(props) {
         return (<div>
             <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target={'#buffer' + props.unique} style={{ 'color': 'black', 'textAlign': 'left' }}>{props.title}</button>
-            <div className="modal" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true" style={{'position':'fixed'}}>
+            <div className="modal" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true" style={{'position':'fixed'}} data-bs-backdrop="false">
                 <div className="modal-dialog" style={{'marginTop':'10%'}} role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -208,7 +208,6 @@ function Search() {
     }
 
     useEffect(() => { star_uploader() }, [StarArr]);
-
     return (
         <div>
             <form style={{ "margin": "0% 2% 2% 3%" }} onSubmit={request}>
