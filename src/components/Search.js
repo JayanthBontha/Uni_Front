@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 const dis = "https://i.imgur.com/3zl65RB.png";
-const down ="https://i.imgur.com/MTY7AJj.png"
-const up ="https://i.imgur.com/efLrj1U.png"
+const down = "https://i.imgur.com/MTY7AJj.png"
+const up = "https://i.imgur.com/efLrj1U.png"
 
 function Search() {
     if (!sessionStorage.getItem('flag')) {
@@ -19,14 +19,16 @@ function Search() {
 
 
     function lougout() {
+        sessionStorage.setItem('flag',0);
         const eve = new CustomEvent('change-nav', {
             detail: {
-                type: "NonUser"
+                type: "NonUser",
+                nme:'loading'
             }
         });
         window.dispatchEvent(eve);
         sessionStorage.setItem('NavbarVar', 'NonUser');
-        fetch(process.env.REACT_APP_HOST+'/logout', {
+        fetch(process.env.REACT_APP_HOST + '/logout', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify({
@@ -35,7 +37,7 @@ function Search() {
         })
         sessionStorage.removeItem('mfa');
         setMulti('none');
-        sessionStorage.setItem('dis','loading')
+        sessionStorage.setItem('dis', 'loading')
         alert("Your session has been terminated. Re-Login to continue")
     }
 
@@ -48,14 +50,14 @@ function Search() {
 
     function sort(id, direc) {
         if (TableData != null) {
-            let col=id.slice(-1);
+            let col = id.slice(-1);
             let tags = ['title', 'field', 'author', 'institute', 'date', 'status']
             let whatever;
             if (direc === "down") {
-                whatever = [...TableData].sort(function (a, b) { return a[tags[col-1]].localeCompare(b[tags[col-1]]); }).reverse();
+                whatever = [...TableData].sort(function (a, b) { return a[tags[col - 1]].localeCompare(b[tags[col - 1]]); }).reverse();
             }
             else {
-                whatever = [...TableData].sort(function (a, b) { return a[tags[col-1]].localeCompare(b[tags[col-1]]); });
+                whatever = [...TableData].sort(function (a, b) { return a[tags[col - 1]].localeCompare(b[tags[col - 1]]); });
             }
             SetTableData(whatever);
         }
@@ -136,8 +138,8 @@ function Search() {
     }
 
     function star_uploader() {
-        if (sessionStorage.getItem('flag') === 1) {
-            fetch(process.env.REACT_APP_HOST+'/view-data/change-star', {
+        if (sessionStorage.getItem('flag') === '1') {
+            fetch(process.env.REACT_APP_HOST + '/view-data/change-star', {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify({
@@ -151,7 +153,7 @@ function Search() {
 
     function request(e) {
         e.preventDefault();
-        fetch(process.env.REACT_APP_HOST+'/view-data', {
+        fetch(process.env.REACT_APP_HOST + '/view-data', {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify({
@@ -166,18 +168,25 @@ function Search() {
                 mfa: sessionStorage.getItem('mfa')
             })
         }).then(res => res.json()).then(final => {
-            SetTableData(final.array);
-            SetOg(final.array);
             if (final.timeout) lougout();
-            else SetStarArr(final.star)
+            else {
+                SetTableData(final.array);
+                SetOg(final.array);
+                SetStarArr(final.star)
+            }
         });
     }
+
+    async function download(id) {
+        console.log('download');
+    }
+
 
     function Mod(props) {
         return (<div>
             <button type="button" className="btn btn-link" data-bs-toggle="modal" data-bs-target={'#buffer' + props.unique} style={{ 'color': 'black', 'textAlign': 'left' }}>{props.title}</button>
-            <div className="modal" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true" style={{'position':'fixed'}} data-bs-backdrop="false">
-                <div className="modal-dialog" style={{'marginTop':'10%'}} role="document">
+            <div className="modal" id={'buffer' + props.unique} tabIndex="-1" role="dialog" aria-hidden="true" style={{ 'position': 'fixed' }} data-bs-backdrop="false">
+                <div className="modal-dialog" style={{ 'marginTop': '10%' }} role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Research Paper</h5>
@@ -190,24 +199,25 @@ function Search() {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            { (sessionStorage.getItem('mfa'))?
+                            {(sessionStorage.getItem('mfa')) ?
                                 (StarArr.includes(props.unique)) ?
                                     <button type='button' className='btn btn-danger' data-bs-dismiss="modal" onClick={() => { star_handler2(false, props.unique) }}>UnStar</button>
                                     : <button type='button' className='btn btn-warning' data-bs-dismiss="modal" onClick={() => { star_handler2(true, props.unique) }}>Star</button>
                                 : <div></div>
                             }
-                            
-                            <Link a="research_paper.pdf" className="btn btn-primary" download>Download</Link>
+
+                            <Link a="research_paper.pdf" className="btn btn-primary" onClick={() => { download(props.unique) }} >Download</Link>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
 
         );
     }
 
     useEffect(() => { star_uploader() }, [StarArr]);
+
     return (
         <div>
             <form style={{ "margin": "0% 2% 2% 3%" }} onSubmit={request}>
@@ -289,12 +299,12 @@ function Search() {
                 <table className="table">
                     <thead>
                         <tr>
-                            <th className='tab-wid-m'>Title<img src={dis} className="im" id="im1" onClick={()=>{change_img("im1")}}></img></th>
-                            <th className='tab-wid'>Field <img src={dis} className="im" id="im2" onClick={()=>{change_img("im2")}}></img></th>
-                            <th className='tab-wid'>Author <img src={dis} className="im" id="im3" onClick={()=>{change_img("im3")}}></img></th>
-                            <th className='tab-wid'>Institution <img src={dis} className="im" id="im4" onClick={()=>{change_img("im4")}}></img></th>
-                            <th className='tab-wid'>Date <img src={dis} className="im" id="im5" onClick={()=>{change_img("im5")}}></img></th>
-                            <th className='tab-wid'>Status <img src={dis} className="im" id="im6" onClick={()=>{change_img("im6")}}></img></th>
+                            <th className='tab-wid-m'>Title<img src={dis} className="im" id="im1" onClick={() => { change_img("im1") }}></img></th>
+                            <th className='tab-wid'>Field <img src={dis} className="im" id="im2" onClick={() => { change_img("im2") }}></img></th>
+                            <th className='tab-wid'>Author <img src={dis} className="im" id="im3" onClick={() => { change_img("im3") }}></img></th>
+                            <th className='tab-wid'>Institution <img src={dis} className="im" id="im4" onClick={() => { change_img("im4") }}></img></th>
+                            <th className='tab-wid'>Date <img src={dis} className="im" id="im5" onClick={() => { change_img("im5") }}></img></th>
+                            <th className='tab-wid'>Status <img src={dis} className="im" id="im6" onClick={() => { change_img("im6") }}></img></th>
 
                             <th>{(Multi === "none") ? (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                                 <path fillRule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z" />

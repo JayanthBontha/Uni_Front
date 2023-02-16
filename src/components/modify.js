@@ -42,6 +42,7 @@ function M() {
           })
         })
         sessionStorage.removeItem('mfa');
+        sessionStorage.setItem('flag', 0)
         alert("Your session has been terminated. Re-Login to continue");
         navigate('/terminate')
       }

@@ -1,6 +1,27 @@
 import { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 function Change() {
+    function lougout() {
+        sessionStorage.setItem('flag',0);
+        const eve = new CustomEvent('change-nav', {
+            detail: {
+                type: "NonUser"
+            }
+        });
+        window.dispatchEvent(eve);
+        sessionStorage.setItem('NavbarVar', 'NonUser');
+        fetch(process.env.REACT_APP_HOST + '/logout', {
+            method: 'POST',
+            headers: { 'Content-type': 'application/json' },
+            body: JSON.stringify({
+                mfa: sessionStorage.getItem('mfa')
+            })
+        })
+        sessionStorage.removeItem('mfa');
+        sessionStorage.setItem('dis', 'loading')
+        alert("Your session has been terminated. Re-Login to continue")
+    }
+
     let navigate = useNavigate();
     useEffect(() => {
         if (sessionStorage.getItem('mfa') == null) {
@@ -28,10 +49,10 @@ function Change() {
                   mfa:sessionStorage.getItem('mfa')
                 })
               }).then(res=>res.json()).then(final=>{
-                if(final.error==null) alert('Password Changed');
-                else if(final.error==1) SetError(1);
+                if(final.error===null) alert('Password Changed');
+                else if(final.error===1) SetError(1);
                 else{
-                    console.log('should be terminated');
+                    lougout();
                 }
               })
         }
